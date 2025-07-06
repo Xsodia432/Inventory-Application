@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "dbConfig":"node ./bin/dbConfig",
     "dev": "node --watch app.js"
   },
   "dependencies": {
