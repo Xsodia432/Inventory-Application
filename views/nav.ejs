@@ -1,1 +1,16 @@
-<nav></nav>
+<nav>
+  <div class="nav-content">
+    <a href="/"><h1>This is Nav</h1></a>
+    <% if(id !== "null") {%> <% if(currentPath === "/") {%><button
+      class="modal-show"
+    >
+      Add Category
+    </button>
+    <%}%> <% if(currentPath.startsWith("/category")) {%><button
+      class="modal-show-items"
+    >
+      Add Item
+    </button>
+    <%}%> <%}%>
+  </div>
+</nav>

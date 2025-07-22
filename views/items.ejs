@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet" />
+    <script src="/script/itemsScript.js" defer></script>
+    <title><%= title %></title>
+  </head>
+  <body>
+   
+    <div class="modal-backdrop modal-hidden">
+       <% if(categoryId !== "null") {%> 
+      <div class="modal-main">
+        <div class="modal-header">
+          <h3>Add Item</h3>
+          <span id="modal-close">X</span>
+        </div>
+        <div class="modal-content">
+          <form id="form-item" data-id="">
+            <div id="errors-container"></div>
+            <label for="itemName">Item Name</label>
+            <input type="text" id="itemName" name="itemName" />
+            <div class="numeric-container">
+              <div>
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" />
+              </div>
+              <div>
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" />
+              </div>
+            </div>
+
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+       <%}%>
+    </div>
+   
+    <%- include("nav",{id:categoryId}) %>
+    <main>
+      <div class="main-container" id="main-container">
+        <div class="edit-container">
+          <h1><%= title %></h1>
+          <% if(categoryId !== "null") {%> 
+          <span class="mdi mdi-pencil-box-multiple"></span>
+
+          <form action="/category/<%= categoryId %>" method="POST" onsubmit="return confirmDelete()">
+          <button type="submit" class="mdi mdi-delete" ></button>
+          </form>
+          <%}%>
+        </div>
+        
+        <table>
+          <thead class="thead">
+            <tr>
+              <td>Items</td>
+              <td>Quantity</td>
+              <td>Price</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody class="tbody">
+            <% for(let i = 0; i<result.length;i++) {%> 
+              <tr>
+                <td><%= result[i].itemname %></td>
+                <td><%= result[i].quantity %></td>
+                <td><%= result[i].price %></td>
+                <td><form action="/item/<%= result[i].id%>/<%= title %>/<%= categoryId %>" method="POST" onsubmit="return confirmDelete()">
+                  <button type="submit">Delete</button>
+                </form></td>
+              </tr>
+              <%}%>
+            
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

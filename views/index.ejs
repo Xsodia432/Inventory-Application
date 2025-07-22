@@ -3,11 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./style.css" rel="stylesheet" />
-    <script src="./script.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto"
+    />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script src="/script/indexScript.js" defer></script>
     <title><%= title %></title>
   </head>
   <body>
-    <h1>Home Page</h1>
+    <div class="modal-backdrop <%= errors.length > 0 ? '' : 'modal-hidden' %>">
+      <div class="modal-main">
+        <div class="modal-header">
+          <h3>Add Category</h3>
+          <span id="modal-close">X</span>
+        </div>
+        <div class="modal-content">
+          <form action="/" method="POST">
+           
+            <% for(let i = 0;i <errors.length;i++) {%>
+              <p id="error"><%=errors[i].msg %></p>
+            <%}%>
+            
+            <label for="categoryName">Category Name</label>
+            <input type="text" id="categoryName" name="categoryName" />
+
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <%- include("nav",{id:""}) %>
+    <main>
+      <div class="main-container" id="main-container">
+        <% if(categories){%>
+        <h1>Categories</h1>
+        <%}%> <% if(!categories){%>
+        <h2>No categories at this moment, add some.</h2>
+
+        <%}%>
+
+        <div class="main-content" id="main-content">
+          <% for(let i = 0; i < categories.length;i++) {%>
+          <a href="category/<%=categories[i].categoryname%>/<%=categories[i].id === 'null' ? 'none' : categories[i].id%>"
+            ><div class="item-container">
+              <h4><%=categories[i].categoryname%></h4>
+            </div></a
+          >
+          <%}%>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
