@@ -51,3 +51,9 @@ exports.deleteCategory = async (categoryId) => {
 exports.deleteItem = async (itemId) => {
   await pool.query("DELETE FROM items WHERE id=$1", [itemId]);
 };
+exports.itemCount = async () => {
+  const { rows } = await pool.query(
+    "SELECT CAST(count(*) as INT) as count FROM items WHERE category_id IS NULL"
+  );
+  return rows;
+};

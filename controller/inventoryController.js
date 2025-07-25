@@ -3,7 +3,7 @@ const query = require("../model/dbQuery");
 
 exports.index = async (req, res) => {
   const categories = await query.getCategories();
-
+  console.log(categories);
   res.render("index", { title: "Home", categories: categories, errors: [] });
 };
 exports.categoriesGet = async (req, res) => {
@@ -62,9 +62,20 @@ exports.itemDelete = async (req, res) => {
   const categoryId =
     req.params.categoryId === "null" ? "none" : req.params.categoryId;
   await query.deleteItem(req.params.itemId);
+  if (categoryId === "none") {
+    const itemCount = await query.itemCount();
+    if (itemCount[0].count === 0) {
+      res.redirect("/");
+      return;
+    }
+  }
   res.redirect(`/category/${req.params.categoryName}/${categoryId}`);
 };
 
+exports.categoryUpdate = async (req, res) => {
+  console.log(req.body);
+  res.send({ msg: "OK" });
+};
 exports.itemsPost = [
   body("itemName")
     .trim()
@@ -98,8 +109,9 @@ exports.itemsPost = [
       res.send({ errors: errors.array() });
       return;
     }
-    const { categoryId, itemName, quantity, price } = req.body;
+    const { itemName, quantity, price } = req.body;
+    const { categoryId, category } = req.params;
     await query.addItem(categoryId, itemName, quantity, price);
-    res.send({ errors: [] });
+    res.redirect(`/category/${category}/${categoryId}`);
   },
 ];

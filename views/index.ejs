@@ -22,7 +22,7 @@
           <form action="/" method="POST">
            
             <% for(let i = 0;i <errors.length;i++) {%>
-              <p id="error"><%=errors[i].msg %></p>
+              <p id="error" class="error"><%=errors[i].msg %></p>
             <%}%>
             
             <label for="categoryName">Category Name</label>
@@ -36,9 +36,9 @@
     <%- include("nav",{id:""}) %>
     <main>
       <div class="main-container" id="main-container">
-        <% if(categories){%>
-        <h1>Categories</h1>
-        <%}%> <% if(!categories){%>
+        <% if(categories.length !== 0){%>
+        <h2>Categories</h2>
+        <%}%> <% if(categories.length === 0){%>
         <h2>No categories at this moment, add some.</h2>
 
         <%}%>

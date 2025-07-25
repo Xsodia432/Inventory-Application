@@ -163,20 +163,23 @@ table {
 }
 .edit-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 10px;
 }
 
-.mdi-delete {
-  color: red;
+.delete-category {
+  background-color: red;
+}
+.edit-category {
+  background-color: slateblue;
+}
+.button {
+  color: white;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  background-color: white;
-}
-.mdi-pencil-box-multiple {
-  color: slateblue;
-  cursor: pointer;
-  font-size: 1.2rem;
+
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: 900;
 }

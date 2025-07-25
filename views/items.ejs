@@ -12,13 +12,13 @@
    
     <div class="modal-backdrop modal-hidden">
        <% if(categoryId !== "null") {%> 
-      <div class="modal-main">
+      <div class="modal-main" id="modal-main">
         <div class="modal-header">
           <h3>Add Item</h3>
           <span id="modal-close">X</span>
         </div>
         <div class="modal-content">
-          <form id="form-item" data-id="">
+          <form action="/items/<%=title%>/<%= categoryId %>" method="POST">
             <div id="errors-container"></div>
             <label for="itemName">Item Name</label>
             <input type="text" id="itemName" name="itemName" />
@@ -44,12 +44,12 @@
     <main>
       <div class="main-container" id="main-container">
         <div class="edit-container">
-          <h1><%= title %></h1>
+          <h2 id="category-title"><%= title %></h2>
           <% if(categoryId !== "null") {%> 
-          <span class="mdi mdi-pencil-box-multiple"></span>
+          <button class="edit-category button" id="edit-category" onclick="categoryEditModal('<%=title%>','<%=categoryId%>')">Edit</button>
 
           <form action="/category/<%= categoryId %>" method="POST" onsubmit="return confirmDelete()">
-          <button type="submit" class="mdi mdi-delete" ></button>
+          <button type="submit" class="delete-category button" >Delete</button>
           </form>
           <%}%>
         </div>
