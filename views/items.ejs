@@ -11,7 +11,7 @@
   <body>
    
     <div class="modal-backdrop modal-hidden">
-       <% if(categoryId !== "null") {%> 
+      
       <div class="modal-main" id="modal-main">
         <div class="modal-header">
           <h3>Add Item</h3>
@@ -37,7 +37,7 @@
           </form>
         </div>
       </div>
-       <%}%>
+       
     </div>
    
     <%- include("nav",{id:categoryId}) %>
@@ -68,10 +68,12 @@
               <tr>
                 <td><%= result[i].itemname %></td>
                 <td><%= result[i].quantity %></td>
-                <td><%= result[i].price %></td>
-                <td><form action="/item/<%= result[i].id%>/<%= title %>/<%= categoryId %>" method="POST" onsubmit="return confirmDelete()">
-                  <button type="submit">Delete</button>
-                </form></td>
+                <td>$<%= result[i].price %></td>
+                <td class="option-items"><form action="/item/<%= result[i].id%>/<%= title %>/<%= categoryId %>" method="POST" onsubmit="return confirmDelete()">
+                  <input type="button" class="edit-category button" value="Edit"onclick="editItem('<%=result[i].id%>','<%=result[i].itemname%>','<%=result[i].quantity%>','<%=result[i].price%>','<%=categoryId%>')">
+                  <button types="submit" class="delete-category button">Delete</button>
+                  
+                </form> </td>
               </tr>
               <%}%>
             

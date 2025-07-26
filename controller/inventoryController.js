@@ -1,9 +1,35 @@
 const { body, validationResult } = require("express-validator");
 const query = require("../model/dbQuery");
 
+const errorsItem = [
+  body("itemName")
+    .trim()
+    .notEmpty()
+    .withMessage("Item name should not be empty.")
+    .isLength({ min: 2, max: 255 })
+    .withMessage("Item name should be between 5-255 characters."),
+  body("quantity")
+    .trim()
+    .notEmpty()
+    .withMessage("Quantity should not be empty.")
+    .isInt()
+    .withMessage("Quantity should be numbers only."),
+  body("price")
+    .trim()
+    .notEmpty()
+    .withMessage("Price should not be empty.")
+    .isDecimal()
+    .withMessage("Price should be numbers only."),
+];
+const errorsCategory = [
+  body("categoryName")
+    .trim()
+    .notEmpty()
+    .withMessage("Category should not be empty."),
+];
 exports.index = async (req, res) => {
   const categories = await query.getCategories();
-  console.log(categories);
+
   res.render("index", { title: "Home", categories: categories, errors: [] });
 };
 exports.categoriesGet = async (req, res) => {
@@ -12,15 +38,12 @@ exports.categoriesGet = async (req, res) => {
   res.send(categories);
 };
 exports.categoryPost = [
-  body("categoryName")
-    .trim()
-    .notEmpty()
-    .withMessage("Category should not be empty.")
-    .custom(async (value) => {
-      if (await query.checkCategory(value)) {
-        throw new Error("Category already exists.");
-      }
-    }),
+  errorsCategory,
+  body("categoryName").custom(async (value) => {
+    if (await query.checkCategory(value)) {
+      throw new Error("Category already exists.");
+    }
+  }),
   async (req, res, next) => {
     const errors = validationResult(req);
     const categories = await query.getCategories();
@@ -47,8 +70,11 @@ exports.itemsView = async (req, res) => {
   const categoryId = req.params.id === "none" ? "null" : req.params.id;
 
   const result = await query.getItems(categoryId);
+
+  const title = await query.categoryGet(categoryId);
+
   res.render("items", {
-    title: req.params.category,
+    title: req.params.id === "none" ? "Uncategorized" : title[0].categoryname,
     result: result,
     categoryId: categoryId,
   });
@@ -69,39 +95,45 @@ exports.itemDelete = async (req, res) => {
       return;
     }
   }
-  res.redirect(`/category/${req.params.categoryName}/${categoryId}`);
+  res.redirect(`/category/${categoryId}`);
 };
 
-exports.categoryUpdate = async (req, res) => {
-  console.log(req.body);
-  res.send({ msg: "OK" });
-};
+exports.categoryUpdate = [
+  errorsCategory,
+  body().custom(async (value) => {
+    const length = await query.checkCategoryUpdate(
+      value.categoryName,
+      value.categoryNameCopy
+    );
+    if (length > 0) {
+      throw new Error("Category already exists.");
+    }
+  }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.send({ errors: errors.array() });
+      return;
+    }
+    await query.categoryUpdate(
+      req.body.categoryName,
+      parseInt(req.body.categoryId)
+    );
+    res.send({
+      msg: "Sent",
+
+      categoryId: req.body.categoryId,
+    });
+  },
+];
 exports.itemsPost = [
-  body("itemName")
-    .trim()
-    .notEmpty()
-    .withMessage("Item name should not be empty.")
-    .isLength({ min: 2, max: 255 })
-    .withMessage("Item name should be between 5-255 characters.")
-    .custom(async (value) => {
-      const item = await query.checkItem(value);
-
-      if (item.length > 0) {
-        throw new Error("Item already exists.");
-      }
-    }),
-  body("quantity")
-    .trim()
-    .notEmpty()
-    .withMessage("Quantity should not be empty.")
-    .isInt()
-    .withMessage("Quantity should be numbers only."),
-  body("price")
-    .trim()
-    .notEmpty()
-    .withMessage("Price should not be empty.")
-    .isInt()
-    .withMessage("Price should be numbers only."),
+  errorsItem,
+  body().custom(async (value) => {
+    const item = await query.checkItem(value.itemName);
+    if (item > 0) {
+      throw new Error("Item already exists.");
+    }
+  }),
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -109,9 +141,32 @@ exports.itemsPost = [
       res.send({ errors: errors.array() });
       return;
     }
-    const { itemName, quantity, price } = req.body;
-    const { categoryId, category } = req.params;
+    const { itemName, quantity, price, categoryId } = req.body;
+
     await query.addItem(categoryId, itemName, quantity, price);
-    res.redirect(`/category/${category}/${categoryId}`);
+    res.send({ msg: "Sent", categoryId: req.body.categoryId });
+  },
+];
+exports.itemUpdate = [
+  errorsItem,
+  body().custom(async (value) => {
+    const item = await query.checkItemUpdate(
+      value.itemName,
+      value.itemNameCopy
+    );
+
+    if (item > 0) {
+      throw new Error("Item already exists.");
+    }
+  }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.send({ errors: errors.array() });
+      return;
+    }
+    const { itemName, quantity, price, itemId, categoryId } = req.body;
+    await query.itemUpdate(itemName, quantity, price, itemId);
+    res.send({ msg: "Sent", categoryId });
   },
 ];

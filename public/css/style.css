@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 :root {
-  --main-width: 400px;
+  --main-width: 600px;
   --main-margin: 10px;
 }
 body {
@@ -151,7 +151,7 @@ th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
-  border-color: #96d4d4;
+  border-color: #c1c5c5;
   padding: 10px;
 }
 #thead tr {
@@ -182,4 +182,10 @@ table {
   padding: 5px;
   border-radius: 5px;
   font-weight: 900;
+}
+.errors-container {
+  color: red;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }

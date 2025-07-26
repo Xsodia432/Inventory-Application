@@ -45,7 +45,7 @@
 
         <div class="main-content" id="main-content">
           <% for(let i = 0; i < categories.length;i++) {%>
-          <a href="category/<%=categories[i].categoryname%>/<%=categories[i].id === 'null' ? 'none' : categories[i].id%>"
+          <a href="category/<%=categories[i].id === 'null' ? 'none' : categories[i].id%>"
             ><div class="item-container">
               <h4><%=categories[i].categoryname%></h4>
             </div></a

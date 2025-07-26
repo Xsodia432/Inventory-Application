@@ -1,6 +1,6 @@
 <nav>
   <div class="nav-content">
-    <a href="/"><h1>This is Nav</h1></a>
+    <a href="/"><h1>Home</h1></a>
     <% if(id !== "null") {%> <% if(currentPath === "/") {%><button
       class="modal-show"
     >
@@ -8,6 +8,7 @@
     </button>
     <%}%> <% if(currentPath.startsWith("/category")) {%><button
       class="modal-show-items"
+      onclick="addItem('<%=id%>')"
     >
       Add Item
     </button>
