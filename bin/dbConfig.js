@@ -5,7 +5,7 @@ require("dotenv/config");
 async function main() {
   console.log("seeding...");
   const client = new Client({
-    connectionString: `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/inventory`,
+    connectionString: process.env.DATABASE_URL,
   });
   await client.connect();
   await client.query(`
