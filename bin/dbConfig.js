@@ -4,10 +4,11 @@ require("dotenv/config");
 
 async function main() {
   console.log("seeding...");
+  console.log(process.env.DATABASE_URL);
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false, // Required for Railway PostgreSQL
+      rejectUnauthorized: false,
     },
   });
   await client.connect();
