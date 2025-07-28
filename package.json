@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dbConfig":"node ./bin/dbConfig",
-    "dev": "node --watch app.js"
+    "dbConfig": "node ./bin/dbConfig",
+    "start": "node --watch app.js"
   },
   "dependencies": {
     "dotenv": "^17.0.1",
